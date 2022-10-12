@@ -10,5 +10,11 @@
       "type": "dart",
       "program": "lib/same_path.dart"
     },
+    {
+      "name": "Go Push",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/go_push.dart"
+    },
   ]
 }
