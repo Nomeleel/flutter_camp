@@ -78,54 +78,65 @@ class GoPushScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pages = GoRouter.of(context).routerDelegate.currentConfiguration.matches;
-    final pushBtnStyle = ButtonStyle(
-      backgroundColor: MaterialStateProperty.all(Colors.greenAccent),
-      foregroundColor: MaterialStateProperty.all(Colors.black),
+    final pages = GoRouter.of(context).routerDelegate.currentConfiguration.matches.reversed.toList();
+    final pushBtnStyle = ElevatedButton.styleFrom(
+      backgroundColor: Colors.greenAccent,
+      foregroundColor: Colors.black,
     );
     return Center(
       child: Column(
         children: [
-          Container(
-            height: 100,
-            color: Colors.purple.withOpacity(.7),
-            child: ListView.builder(
-              itemCount: pages.length,
-              itemExtent: 22,
-              itemBuilder: (context, index) => Container(
-                color: Colors.primaries[index % Colors.primaries.length],
-                alignment: Alignment.center,
-                child: Text(pages[index].fullpath),
+          Stack(
+            alignment: Alignment.topRight,
+            children: [
+              Container(
+                constraints: const BoxConstraints(maxHeight: 150),
+                child: ListView.builder(
+                  padding: EdgeInsets.zero,
+                  shrinkWrap: true,
+                  itemCount: pages.length,
+                  itemExtent: 22,
+                  itemBuilder: (context, index) {
+                    final page = pages[index].fullUriString;
+                    return Container(
+                      color: Colors.primaries[index % Colors.primaries.length].withOpacity(.5),
+                      alignment: Alignment.center,
+                      child: Text(index == 0 ? 'CURRENT: $page' : page),
+                    );
+                  },
+                ),
               ),
-            ),
+              if (pages.length > 3) Banner(message: 'Pages: ${pages.length}', location: BannerLocation.topEnd),
+            ],
           ),
+          Container(height: 20, color: Colors.primaries.last, alignment: Alignment.center, child: const Text('END')),
           ...[
             ElevatedButton(
               onPressed: () => context.go('/'),
-              child: const Text('Go to home screen'),
+              child: const Text('Go to HOME screen'),
             ),
             ElevatedButton(
               style: pushBtnStyle,
               onPressed: () => context.push('/'),
-              child: const Text('Push to home screen'),
+              child: const Text('Push to HOME screen'),
             ),
             ElevatedButton(
               onPressed: () => context.go('/first'),
-              child: const Text('Go to first screen'),
+              child: const Text('Go to FIRST screen'),
             ),
             ElevatedButton(
               style: pushBtnStyle,
               onPressed: () => context.push('/first'),
-              child: const Text('Push to first screen'),
+              child: const Text('Push to FIRST screen'),
             ),
             ElevatedButton(
               onPressed: () => context.go('/second'),
-              child: const Text('Go to second screen'),
+              child: const Text('Go to SECOND screen'),
             ),
             ElevatedButton(
               style: pushBtnStyle,
               onPressed: () => context.push('/second'),
-              child: const Text('Push to second screen'),
+              child: const Text('Push to SECOND screen'),
             ),
           ].map((e) => Expanded(child: Center(child: e)))
         ],
